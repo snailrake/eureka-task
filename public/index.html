@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Privileges</title>
+</head>
+
+<body>
+    <h2>Check User Priviliges</h2>
+    <form id="userCheckForm">
+        <label for="userName">username:</label>
+        <input type="text" id="userName" name="userName">
+        <br>
+        <button type="submit">Check</button>
+    </form>
+    <script>
+        document.getElementById('userCheckForm').onsubmit = function (event) {
+            event.preventDefault();
+            const userName = document.getElementById('userName').value;
+
+            fetch('/check', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userName: userName }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.body.innerHTML = `<h2>${data.message}</h2><button onclick="window.location.reload()">Back</button>`;
+                })
+                .catch(error => {
+                    console.error('An error occurred:', error);
+                    alert('An error occurred while processing your request. Please check the console for details.');
+                });
+        };
+    </script>
+</body>
+
+</html>
